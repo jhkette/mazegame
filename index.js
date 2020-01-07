@@ -31,6 +31,21 @@ World.add(world, walls);
 
 // Maze generations
 
+const shuffle = (arr) => {
+  let counter = arr.length;
+  while(counter > 0){
+    const index = Math.floor(Math.random() * counter);
+    counter --;
+
+    const temp = arr[counter];
+    arr[counter]
+    arr[index] = temp
+  }
+  return arr;
+}
+
+
+
 /// - ie this is the grid - three sets of arrays
 ///
 ///
@@ -61,9 +76,30 @@ console.log(horizontals);
 console.log(verticals);
 
 
+const startRow = Math.floor(Math.random() * cells)
+const startColumn = Math.floor(Math.random() * cells)
 
+const stepthrough = (row, column) => {
 
+  // if visited cell return
+  if(grid[row][column]){
+    return
+  }
+  // mark as visited
+  grid[row][column] = true;
+  
+  const neighbors = shuffle([
+    [row - 1, column, 'up'],
+    [row, column + 1, 'right'],
+    [row + 1, column, 'down'],
+    [row, column - 1, 'left']
+  ]);
 
+  console.log(neighbors);
+
+}
+
+stepthrough(1,1);
 
 
 
