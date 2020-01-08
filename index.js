@@ -1,4 +1,4 @@
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body } = Matter;
 
 const cells = 10;
 
@@ -32,18 +32,21 @@ World.add(world, walls);
 
 // Maze generations
 
-const shuffle = (arr) => {
+const shuffle = arr => {
   let counter = arr.length;
-  while(counter > 0){
+
+  while (counter > 0) {
     const index = Math.floor(Math.random() * counter);
-    counter --;
+
+    counter--;
 
     const temp = arr[counter];
-    arr[counter]
-    arr[index] = temp
+    arr[counter] = arr[index];
+    arr[index] = temp;
   }
+
   return arr;
-}
+};
 
 
 
@@ -62,15 +65,15 @@ const shuffle = (arr) => {
 // the grid
 const grid = Array(cells)
   .fill(null)
-  .map((a) => Array(cells).fill(false));
+  .map(() => Array(cells).fill(false));
 
 const verticals = Array(cells)
   .fill(null)
-  .map((a) => Array(cells -1).fill(false));
+  .map(() => Array(cells - 1).fill(false));
 
-const horizontals = Array(cells-1)  
+const horizontals = Array(cells - 1)
   .fill(null)
-  .map((a) => Array(cells).fill(false))
+  .map(() => Array(cells).fill(false));
 
 
 console.log(horizontals);
@@ -134,6 +137,7 @@ const stepThroughCell = (row, column) => {
 
 stepThroughCell(startRow, startColumn);
 
+
 horizontals.forEach((row, rowIndex) => {
   row.forEach((open, columnIndex) => {
     if (open) {
@@ -144,7 +148,7 @@ horizontals.forEach((row, rowIndex) => {
       columnIndex * unitLength + unitLength / 2,
       rowIndex * unitLength + unitLength,
       unitLength,
-      10,
+      5,
       {
         isStatic: true
       }
@@ -152,9 +156,6 @@ horizontals.forEach((row, rowIndex) => {
     World.add(world, wall);
   });
 });
-
-
-
 
 verticals.forEach((row, rowIndex) => {
   row.forEach((open, columnIndex) => {
@@ -198,18 +199,23 @@ World.add(world, ball);
 
 
 document.addEventListener('keydown', event =>{
+  const {x, y} = ball.velocity;
   console.log(event)
-  if(event.keyCode == 87){
-    console.log('up')
+
+  if (event.keyCode === 87) {
+    Body.setVelocity(ball, { x, y: y - 5 });
   }
-  if(event.keyCode == 68){
-    console.log('right')
+
+  if (event.keyCode === 68) {
+    Body.setVelocity(ball, { x: x + 5, y });
   }
-  if(event.keyCode == 83){
-    console.log('down')
+
+  if (event.keyCode === 83) {
+    Body.setVelocity(ball, { x, y: y + 5 });
   }
-  if(event.keyCode == 65){
-    console.log('left')
+
+  if (event.keyCode === 65) {
+    Body.setVelocity(ball, { x: x - 5, y });
   }
 })
 
